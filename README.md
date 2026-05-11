@@ -1,7 +1,7 @@
 # VXP2-IISC-PROTOTYPE
 This repository contains our VXP2 Iteration 1.0B for IISc FSID/STEM Technical Assessment. Hybrid AI-Physics Predictive Maintenance for Aerospace. Integrating LSTM Neural Networks with Thermodynamic Guardrails to achieve >80% accuracy in engine RUL prediction. Built for Orion Spacetech.
 
-# VECTOR VXP2 Prototype 2.0 🛰️
+# VECTOR VXP2 Prototype 1.0B -
 **Physics-Informed Neural Networks (PINN) for Next-Gen Aerospace Reliability**
 
 VECTOR VXP2 is a predictive maintenance platform designed by **Orion Spacetech** to solve the aerospace certification bottleneck. It transitions predictive analytics from simple "black-box" AI to a self-certifying, physics-grounded architecture.
