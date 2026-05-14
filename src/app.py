@@ -31,7 +31,7 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap');
 
         :root {
             --bg: #050505;
@@ -106,9 +106,19 @@ def inject_styles() -> None:
         /* Telemetry uploader cleanup: enforce a single clear upload CTA */
         [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
             background: #070707;
-            border: 1px solid #242424;
-            border-radius: 2px;
-            padding: 0.45rem 0.55rem;
+            border: 1px dashed #333;
+            border-radius: 4px;
+            padding: 0 !important;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: border-color 0.3s ease;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"]:hover {
+            border-color: var(--line-hot);
         }
 
         [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] > div:first-child {
@@ -117,35 +127,97 @@ def inject_styles() -> None:
 
         [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button {
             font-family: 'JetBrains Mono', monospace !important;
-            font-size: 0.84rem !important;
-            letter-spacing: 0.02em !important;
-            background: #0F0F0F !important;
+            font-size: 0 !important;
+            background: #121212 !important;
             color: #FFFFFF !important;
-            border: 1px solid #343434 !important;
+            border: 1px solid #3A3A3A !important;
             border-radius: 2px !important;
-            min-height: 34px !important;
-            padding: 0.25rem 0.75rem !important;
-            text-transform: none !important;
-            box-shadow: none !important;
+            min-height: 28px !important;
+            height: 28px !important;
+            padding: 0 10px !important;
             position: relative !important;
+            transition: all 0.2s ease;
+            z-index: 2;
         }
 
-        /* Force one clean CTA label and hide duplicated internal button text */
-        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button * {
-            color: transparent !important;
+        /* Initial state: Big clickable area within instructions */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            min-height: 80px !important;
         }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"]::after {
+            content: "UPLOAD TELEMETRY" !important;
+            font-family: 'Chakra Petch', sans-serif !important;
+            letter-spacing: 0.1em !important;
+            font-weight: 600 !important;
+            font-size: 0.85rem !important;
+            color: var(--text-dim) !important;
+            position: absolute !important;
+            pointer-events: none !important;
+        }
+
+        /* Force remove all default uploader internal visuals and residual boxes */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] > div,
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] svg,
+        [data-testid="stSidebar"] [data-testid="stFileUploaderIcon"],
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] [class*="icon"] {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+            opacity: 0 !important;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] button {
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            border: none !important;
+            z-index: 1;
+        }
+
+        /* Icon styling for post-upload buttons */
         [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button::after {
-            content: "Upload" !important;
-            color: #FFFFFF !important;
             position: absolute !important;
             inset: 0 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
-            font-family: 'JetBrains Mono', monospace !important;
-            font-size: 0.84rem !important;
-            letter-spacing: 0.02em !important;
+            font-size: 1rem !important;
             pointer-events: none !important;
+            color: #FFFFFF !important;
+        }
+
+        /* Material icons for post-upload buttons */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] [data-testid="stBaseButton-secondary"]:nth-of-type(1):not(:only-of-type)::after {
+            content: "add" !important;
+            font-family: 'Material Symbols Outlined' !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] [data-testid="stBaseButton-secondary"]:nth-of-type(2)::after {
+            content: "close" !important;
+            font-family: 'Material Symbols Outlined' !important;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button:not(:only-child) {
+            width: 32px !important;
+            padding: 0 !important;
+            border-radius: 4px !important;
+            margin-left: 4px;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button:hover {
+            border-color: var(--line-hot) !important;
+            background: #1A1A1A !important;
+            color: var(--line-hot) !important;
+        }
+
+        /* Hide internal labels */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button * {
+            display: none !important;
         }
 
         [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] small {
@@ -209,6 +281,33 @@ def inject_styles() -> None:
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.08em;
+        }
+
+        /* Engage Simulation Button - Mission Critical Red */
+        [data-testid="stSidebar"] .stButton button {
+            background: #FF0000 !important;
+            border: 1px solid #FF0000 !important;
+            color: #FFFFFF !important;
+            font-family: 'Chakra Petch', sans-serif !important;
+            letter-spacing: 0.12em !important;
+            font-weight: 700 !important;
+            text-transform: uppercase !important;
+            margin-top: 1rem !important;
+            border-radius: 4px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2) !important;
+        }
+
+        [data-testid="stSidebar"] .stButton button:hover {
+            background: #CC0000 !important;
+            border-color: #CC0000 !important;
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4) !important;
+            transform: translateY(-2px) !important;
+        }
+
+        [data-testid="stSidebar"] .stButton button:active {
+            transform: translateY(0px) !important;
+            background: #990000 !important;
         }
 
         .status-pill {
@@ -335,6 +434,30 @@ def inject_styles() -> None:
             padding: 0.6rem;
             text-align: center;
         }
+
+        /* Floating Sidebar Toggle */
+        .sidebar-toggle-container {
+            position: fixed;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999999;
+        }
+        .sidebar-toggle-container button {
+            background: #0A0A0A !important;
+            border: 1px solid var(--line) !important;
+            border-left: none !important;
+            color: var(--text-dim) !important;
+            padding: 1.2rem 0.4rem !important;
+            border-radius: 0 4px 4px 0 !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            transition: all 0.2s ease !important;
+        }
+        .sidebar-toggle-container button:hover {
+            border-color: var(--line-hot) !important;
+            color: var(--line-hot) !important;
+            background: #111111 !important;
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -342,6 +465,29 @@ def inject_styles() -> None:
 
 
 inject_styles()
+
+if "sidebar_collapsed" not in st.session_state:
+    st.session_state.sidebar_collapsed = False
+
+if st.session_state.sidebar_collapsed:
+    st.markdown(
+        """
+        <style>
+        [data-testid="stSidebar"] {
+            display: none !important;
+        }
+        .main .block-container {
+            max-width: 1650px !important;
+        }
+        </style>
+        <div class="sidebar-toggle-container">
+        """,
+        unsafe_allow_html=True
+    )
+    if st.button("keyboard_double_arrow_right", help="Expand Controls"):
+        st.session_state.sidebar_collapsed = False
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 CMAPSS_COLS = ["unit", "cycle"] + [f"op{i}" for i in range(1, 4)] + [f"s{i}" for i in range(1, 22)]
 
@@ -493,7 +639,7 @@ def build_sensor_trend(cycles: list[int], values: list[float]) -> go.Figure:
         showlegend=False,
         xaxis={"title": "Cycle", "gridcolor": "rgba(255,255,255,0.06)", "color": "#7A7A7A"},
         yaxis={"title": "Temperature", "gridcolor": "rgba(255,255,255,0.06)", "color": "#7A7A7A"},
-        height=290,
+        height=400,
     )
     return fig
 
@@ -657,7 +803,10 @@ with st.sidebar:
     sim_speed = st.slider("Playback speed", 0.03, 0.60, 0.12, 0.01)
     buffer_size = st.slider("Buffer size", 20, 220, 60, 10)
     noise_level = st.slider("Noise level (%)", 0, 15, 0, 1)
-    auto_run = st.button("ENGAGE SIMULATION", use_container_width=True)
+    def on_engage():
+        st.session_state.sidebar_collapsed = True
+
+    auto_run = st.button("ENGAGE SIMULATION", on_click=on_engage, use_container_width=True)
     TelemetrySidebar(uploaded_file, sim_speed, buffer_size, noise_level)
 
 
@@ -746,23 +895,23 @@ with kpi_cols[2]:
 with kpi_cols[3]:
     StatusKPICard("Engine Health %", f"{health_percent:.1f}", "Composite score", "#FF0000")
 with kpi_cols[4]:
-    StatusKPICard("Remaining Useful Life", f"{last_rul:.1f}", "Cycles", "#FF0000")
+    StatusKPICard("RUL", f"{last_rul:.1f}", "Cycles", "#FF0000")
 with kpi_cols[5]:
     StatusKPICard("Risk Level", risk_level, "Assessment", "#D4A017" if risk_level == "WARNING" else "#FF0000")
 
 st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
-top_left, top_right = st.columns([2, 2])
-with top_left:
-    st.markdown('<div class="panel">', unsafe_allow_html=True)
-    EngineHealthPanel(risk_level if auto_run else "STANDBY", confidence, last_cycle, health_percent, last_rul)
-    st.markdown('</div>', unsafe_allow_html=True)
-with top_right:
-    st.markdown('<div class="panel"><div class="panel-title">Sensor Trend Panel</div>', unsafe_allow_html=True)
-    if auto_run:
-        SensorTrendChart(cycles_hist[-buffer_size:], s11_hist[-buffer_size:])
-    else:
-        st.markdown('<div class="standby-msg">LIVE TELEMETRY ACTIVE after simulation engage</div>', unsafe_allow_html=True)
-    st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
+st.markdown('<div class="panel">', unsafe_allow_html=True)
+EngineHealthPanel(risk_level if auto_run else "STANDBY", confidence, last_cycle, health_percent, last_rul)
+st.markdown('</div>', unsafe_allow_html=True)
+
+st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
+st.markdown('<div class="panel"><div class="panel-title">Sensor Trend Panel</div>', unsafe_allow_html=True)
+if auto_run:
+    SensorTrendChart(cycles_hist[-buffer_size:], s11_hist[-buffer_size:])
+else:
+    st.markdown('<div class="standby-msg">LIVE TELEMETRY ACTIVE after simulation engage</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
 st.markdown('<div class="panel">', unsafe_allow_html=True)
