@@ -23,7 +23,7 @@ st.set_page_config(
     page_title="VECTOR VXP2 Mission Control",
     page_icon="V",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -69,6 +69,175 @@ def inject_styles() -> None:
             max-width: 1500px;
             padding-top: 1rem;
             padding-bottom: 1.2rem;
+        }
+
+        /* Telemetry Header Console - Unified Design */
+        .telemetry-header {
+            background: #050505 !important;
+            border: 1px solid #1A1A1A !important;
+            border-top: 2px solid var(--line-hot) !important; /* Visual status indicator */
+            padding: 1.2rem 1.5rem !important;
+            margin-bottom: 1rem !important;
+            border-radius: 4px !important;
+        }
+
+        .telemetry-title {
+            font-family: 'Chakra Petch', sans-serif !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.15em !important;
+            color: #FFFFFF !important;
+            font-size: 0.75rem !important;
+            font-weight: 700 !important;
+            margin-bottom: 1.2rem !important;
+            opacity: 0.9;
+        }
+
+        /* Universal File Uploader Overhaul */
+        [data-testid="stFileUploaderDropzone"] {
+            background: linear-gradient(180deg, #111111 0%, #080808 100%) !important;
+            border: 1px dashed #2A2A2A !important;
+            border-radius: 4px !important;
+            height: 110px !important; /* Precision matched height */
+            min-height: 110px !important;
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.3s ease !important;
+            overflow: hidden !important;
+        }
+
+        [data-testid="stFileUploaderDropzone"]:hover {
+            border-color: var(--line-hot) !important;
+            background: linear-gradient(180deg, #1A1A1A 0%, #0A0A0A 100%) !important;
+        }
+
+        [data-testid="stFileUploaderDropzoneInstructions"] {
+            display: none !important;
+        }
+
+        [data-testid="stFileUploaderDropzone"] button {
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            border: none !important;
+            z-index: 10 !important;
+            font-size: 0 !important;
+        }
+
+        [data-testid="stFileUploaderDropzone"] button * {
+            display: none !important;
+        }
+
+        [data-testid="stFileUploaderDropzone"]::after {
+            content: "UPLOAD TELEMETRY" !important;
+            font-family: 'Chakra Petch', sans-serif !important;
+            font-size: 0.75rem !important;
+            letter-spacing: 0.15em !important;
+            font-weight: 600 !important;
+            color: #FFFFFF !important;
+            opacity: 0.8;
+            pointer-events: none !important;
+            text-transform: uppercase !important;
+            text-align: center !important;
+        }
+
+        [data-testid="stFileUploaderDropzone"]:hover::after {
+            color: #FFFFFF !important;
+        }
+
+        /* Matched telemetry card sizing */
+        .tactical-console {
+            height: 110px !important;
+            min-height: 110px !important;
+            background: linear-gradient(180deg, #111111 0%, #080808 100%) !important;
+            border: 1px solid #2A2A2A !important;
+            border-radius: 4px !important;
+            padding: 0.8rem 1rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            overflow: hidden !important;
+        }
+
+        /* Eliminate Streamlit container gaps inside the console */
+        .tactical-console [data-testid="stVerticalBlock"] > div {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .telemetry-controls [data-testid="stSelectbox"] {
+            margin-bottom: 0 !important;
+        }
+
+        .telemetry-controls [data-baseweb="select"] > div {
+            min-height: 24px !important;
+            height: 24px !important;
+            background: #050505 !important;
+            border: 1px solid #1E1E1E !important;
+            border-radius: 2px !important;
+            color: #FFFFFF !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.68rem !important;
+        }
+
+        .telemetry-controls [data-testid="stFileUploader"] {
+            height: 105px !important;
+            min-height: 105px !important;
+        }
+
+        /* Sleek "Ghost" Sliders */
+        #vector-command-header [data-testid="stSlider"] {
+            background: transparent !important;
+            border: none !important;
+            padding: 0 !important;
+            margin-top: -0.5rem !important;
+        }
+
+        [data-testid="stSlider"] [data-baseweb="slider"] > div {
+            background: rgba(255, 255, 255, 0.08) !important; /* Ghost Track */
+            height: 2px !important;
+        }
+
+        [data-testid="stSlider"] [data-baseweb="slider"] > div > div {
+            background: var(--line-hot) !important; /* Precision Progress */
+            opacity: 0.9;
+        }
+
+        [data-testid="stSlider"] [role="slider"] {
+            background: #FF0000 !important;
+            border: 2px solid #FF0000 !important;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.4) !important;
+            height: 10px !important;
+            width: 10px !important;
+            border-radius: 1px !important; /* Technical square look */
+        }
+
+        /* Simulation Button - Tactical Red */
+        .telemetry-controls .stButton button {
+            background: #FF0000 !important;
+            border: none !important;
+            color: #FFFFFF !important;
+            font-family: 'Chakra Petch', sans-serif !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.12em !important;
+            text-transform: uppercase !important;
+            height: 110px !important; /* Matched height */
+            width: 100% !important;
+            border-radius: 2px !important;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+        }
+
+        .telemetry-controls .stButton button:hover {
+            background: #CC0000 !important;
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4) !important;
+            transform: translateY(-2px) !important;
         }
 
         [data-testid="stSidebar"] {
@@ -448,10 +617,24 @@ def inject_styles() -> None:
             border: 1px solid var(--line) !important;
             border-left: none !important;
             color: var(--text-dim) !important;
-            padding: 1.2rem 0.4rem !important;
+            padding: 0 !important;
+            width: 32px !important;
+            height: 60px !important;
             border-radius: 0 4px 4px 0 !important;
-            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0 !important; /* Hide the label text */
+            position: relative !important;
             transition: all 0.2s ease !important;
+        }
+        .sidebar-toggle-container button::after {
+            content: "→" !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 1.5rem !important;
+            position: absolute !important;
+            inset: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: inherit !important;
         }
         .sidebar-toggle-container button:hover {
             border-color: var(--line-hot) !important;
@@ -473,7 +656,11 @@ if st.session_state.sidebar_collapsed:
     st.markdown(
         """
         <style>
-        [data-testid="stSidebar"] {
+        section[data-testid="stSidebar"] {
+            display: none !important;
+            width: 0 !important;
+        }
+        [data-testid="stSidebarNav"] {
             display: none !important;
         }
         .main .block-container {
@@ -484,7 +671,7 @@ if st.session_state.sidebar_collapsed:
         """,
         unsafe_allow_html=True
     )
-    if st.button("keyboard_double_arrow_right", help="Expand Controls"):
+    if st.button("COLLAPSE_RESTORE", help="Expand Controls"):
         st.session_state.sidebar_collapsed = False
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
@@ -726,6 +913,63 @@ def TelemetrySidebar(uploaded_file, sim_speed, buffer_size, noise_level) -> None
         unsafe_allow_html=True,
     )
 
+def TelemetryHeaderControls() -> tuple:
+    # Initialize session state for telemetry parameters if not present
+    if "sim_speed" not in st.session_state: st.session_state.sim_speed = 0.12
+    if "buffer_size" not in st.session_state: st.session_state.buffer_size = 60
+    if "noise_level" not in st.session_state: st.session_state.noise_level = 0
+    
+    # 3-Column Layout: [Upload | Integrated Tactical Console | Engage]
+    c1, c2, c3 = st.columns([1.25, 4.5, 1.25])
+    
+    with c1:
+        uploaded_file = st.file_uploader(
+            "Upload Telemetry",
+            type=["csv", "txt"],
+            key="telemetry_uploader_top",
+            label_visibility="collapsed",
+        )
+
+    with c2:
+        # Integrated Tactical Console (Selector + Slider)
+        st.markdown('<div class="tactical-console">', unsafe_allow_html=True)
+        
+        param_type = st.selectbox(
+            "Parameter Select",
+            ["Playback Speed", "Buffer Size", "Noise Level (%)"],
+            key="param_selector",
+            label_visibility="collapsed"
+        )
+        
+        # Wide Slider directly underneath
+        if param_type == "Playback Speed":
+            st.session_state.sim_speed = st.slider(
+                "ADJUST PLAYBACK SPEED (SEC/CYCLE)", 0.03, 0.60, 
+                float(st.session_state.sim_speed), 0.01
+            )
+        elif param_type == "Buffer Size":
+            st.session_state.buffer_size = st.slider(
+                "ADJUST BUFFER SIZE (CYCLES)", 20, 220, 
+                int(st.session_state.buffer_size), 10
+            )
+        else:
+            st.session_state.noise_level = st.slider(
+                "ADJUST NOISE LEVEL (%)", 0, 15, 
+                int(st.session_state.noise_level), 1
+            )
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    with c3:
+        auto_run = st.button("ENGAGE SIMULATION", use_container_width=True, key="engage_top")
+
+    return (
+        uploaded_file, 
+        float(st.session_state.sim_speed), 
+        int(st.session_state.buffer_size), 
+        int(st.session_state.noise_level), 
+        bool(auto_run)
+    )
+
 
 def StatusKPICard(label: str, value: str, subtext: str = "", hot_line: str = "#FF0000") -> None:
     st.markdown(
@@ -797,18 +1041,24 @@ def EngineHealthPanel(status: str, confidence: float, current_cycle: int, health
         )
 
 
-with st.sidebar:
-    st.markdown('<div class="console-section-title">Telemetry Input + Simulation Controls</div>', unsafe_allow_html=True)
-    uploaded_file = st.file_uploader("Telemetry Stream", type=["csv", "txt"], label_visibility="collapsed")
-    sim_speed = st.slider("Playback speed", 0.03, 0.60, 0.12, 0.01)
-    buffer_size = st.slider("Buffer size", 20, 220, 60, 10)
-    noise_level = st.slider("Noise level (%)", 0, 15, 0, 1)
-    def on_engage():
-        st.session_state.sidebar_collapsed = True
-
-    auto_run = st.button("ENGAGE SIMULATION", on_click=on_engage, use_container_width=True)
-    TelemetrySidebar(uploaded_file, sim_speed, buffer_size, noise_level)
-
+status_state = "OFFLINE"
+st.markdown('<div class="telemetry-header telemetry-controls">', unsafe_allow_html=True)
+st.markdown('<div class="telemetry-title">Telemetry Input + Simulation Controls</div>', unsafe_allow_html=True)
+uploaded_file, sim_speed, buffer_size, noise_level, auto_run = TelemetryHeaderControls()
+file_name = "No file loaded" if uploaded_file is None else uploaded_file.name
+file_size = "-" if uploaded_file is None else f"{uploaded_file.size / 1024:.1f} KB"
+v_status = "STANDBY: Awaiting telemetry stream" if uploaded_file is None else "Validation complete"
+v_color = "#D4A017" if uploaded_file is None else "#FFFFFF"
+live_txt = "LIVE TELEMETRY ACTIVE" if auto_run else "STANDBY"
+live_color = "#FF0000" if auto_run else "#7A7A7A"
+st.markdown(
+    f'<div class="telemetry-status">File: <span style="color:#FFFFFF">{file_name}</span> | '
+    f'Size: <span style="color:#B5B5B5">{file_size}</span> | '
+    f'Status: <span style="color:{v_color}">{v_status}</span> | '
+    f'<span style="color:{live_color}">{live_txt}</span></div>',
+    unsafe_allow_html=True,
+)
+st.markdown("</div>", unsafe_allow_html=True)
 
 status_state = "OFFLINE"
 if uploaded_file is not None:
@@ -823,8 +1073,7 @@ if uploaded_file is None:
 
 df = load_cmapss(uploaded_file)
 units = sorted(df["unit"].unique()) if "unit" in df.columns else [1]
-with st.sidebar:
-    selected_unit = st.selectbox("Engine Unit", units)
+selected_unit = st.selectbox("Engine Unit", units)
 unit_df = df[df["unit"] == selected_unit].reset_index(drop=True) if "unit" in df.columns else df.copy()
 
 total_cycles = int(unit_df["cycle"].max()) if "cycle" in unit_df.columns else len(unit_df)
