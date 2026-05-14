@@ -51,6 +51,20 @@ def inject_styles() -> None:
             font-family: 'JetBrains Mono', monospace;
         }
 
+        /* Preserve icon glyph fonts so ligature names (e.g. keyboard_double_*) do not render as text */
+        .material-icons,
+        .material-symbols-outlined,
+        .material-symbols-rounded,
+        .material-symbols-sharp,
+        [class*="material-symbols"] {
+            font-family: 'Material Icons', 'Material Symbols Outlined', sans-serif !important;
+            font-style: normal !important;
+            letter-spacing: normal !important;
+            text-transform: none !important;
+            white-space: nowrap !important;
+            direction: ltr !important;
+        }
+
         .main .block-container {
             max-width: 1500px;
             padding-top: 1rem;
@@ -68,6 +82,75 @@ def inject_styles() -> None:
             border: 1px solid var(--line);
             border-radius: 2px;
             padding: 0.4rem 0.55rem;
+        }
+
+        /* Slider theme: solid red thumb, no blue hollow ring */
+        [data-testid="stSidebar"] [data-testid="stSlider"] [role="slider"] {
+            background: var(--line-hot) !important;
+            border: 2px solid var(--line-hot) !important;
+            box-shadow: none !important;
+            outline: none !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stSlider"] [role="slider"]:focus,
+        [data-testid="stSidebar"] [data-testid="stSlider"] [role="slider"]:focus-visible {
+            box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.25) !important;
+            outline: none !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stSlider"] [data-baseweb="slider"] div[role="progressbar"] {
+            background-color: rgba(255, 0, 0, 0.22) !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stSlider"] [data-baseweb="slider"] div[role="presentation"] {
+            background-color: #222222 !important;
+        }
+
+        /* Telemetry uploader cleanup: enforce a single clear upload CTA */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] {
+            background: #070707;
+            border: 1px solid #242424;
+            border-radius: 2px;
+            padding: 0.45rem 0.55rem;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzoneInstructions"] > div:first-child {
+            display: none;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button {
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.84rem !important;
+            letter-spacing: 0.02em !important;
+            background: #0F0F0F !important;
+            color: #FFFFFF !important;
+            border: 1px solid #343434 !important;
+            border-radius: 2px !important;
+            min-height: 34px !important;
+            padding: 0.25rem 0.75rem !important;
+            text-transform: none !important;
+            box-shadow: none !important;
+            position: relative !important;
+        }
+
+        /* Force one clean CTA label and hide duplicated internal button text */
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button * {
+            color: transparent !important;
+        }
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] button::after {
+            content: "Upload" !important;
+            color: #FFFFFF !important;
+            position: absolute !important;
+            inset: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-family: 'JetBrains Mono', monospace !important;
+            font-size: 0.84rem !important;
+            letter-spacing: 0.02em !important;
+            pointer-events: none !important;
+        }
+
+        [data-testid="stSidebar"] [data-testid="stFileUploaderDropzone"] small {
+            color: #A8A8A8 !important;
+            font-size: 0.72rem !important;
         }
 
         .console-section-title {
@@ -511,38 +594,6 @@ def StatusKPICard(label: str, value: str, subtext: str = "", hot_line: str = "#F
     )
 
 
-def PipelineStatusStrip(stage_states: dict[str, str]) -> None:
-    def led_color(state: str) -> str:
-        if state == "failed":
-            return "#FF0000"
-        if state == "active":
-            return "#D4A017"
-        if state == "complete":
-            return "#FFFFFF"
-        return "#2A2A2A"
-
-    stages = [
-        "DATA INGESTION",
-        "PREPROCESSING",
-        "MODEL INFERENCE",
-        "RUL ESTIMATION",
-        "ALERT GENERATION",
-    ]
-    html = ['<div class="pipeline-strip">']
-    for stage in stages:
-        state = stage_states.get(stage, "idle")
-        html.append(
-            f"""
-            <div class="pipe-item">
-                <div class="pipe-name">{stage}</div>
-                <div class="pipe-state"><span class="led" style="background:{led_color(state)};"></span>{state.upper()}</div>
-            </div>
-            """
-        )
-    html.append("</div>")
-    st.markdown("".join(html), unsafe_allow_html=True)
-
-
 def AlertCenter(alert_rows: list[dict]) -> None:
     st.markdown('<div class="panel-title">ALERT CENTER</div>', unsafe_allow_html=True)
     if not alert_rows:
@@ -619,7 +670,6 @@ MissionHeader(status_state)
 
 if uploaded_file is None:
     st.markdown('<div class="standby-msg">STANDBY: Awaiting telemetry stream</div>', unsafe_allow_html=True)
-    PipelineStatusStrip({stage: "idle" for stage in ["DATA INGESTION", "PREPROCESSING", "MODEL INFERENCE", "RUL ESTIMATION", "ALERT GENERATION"]})
     st.stop()
 
 df = load_cmapss(uploaded_file)
@@ -699,18 +749,6 @@ with kpi_cols[4]:
     StatusKPICard("Remaining Useful Life", f"{last_rul:.1f}", "Cycles", "#FF0000")
 with kpi_cols[5]:
     StatusKPICard("Risk Level", risk_level, "Assessment", "#D4A017" if risk_level == "WARNING" else "#FF0000")
-
-st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
-stage_state = {
-    "DATA INGESTION": "complete",
-    "PREPROCESSING": "complete",
-    "MODEL INFERENCE": "active" if auto_run else "idle",
-    "RUL ESTIMATION": "active" if auto_run else "idle",
-    "ALERT GENERATION": "active" if auto_run else "idle",
-}
-if auto_run:
-    stage_state = {k: "complete" for k in stage_state}
-PipelineStatusStrip(stage_state)
 
 st.markdown('<div style="height:0.5rem;"></div>', unsafe_allow_html=True)
 top_left, top_right = st.columns([2, 2])
